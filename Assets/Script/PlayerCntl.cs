@@ -15,6 +15,7 @@ public class PlayerCntl : MonoBehaviour
 
     [SerializeField]
     float junp = 5.0f;
+    bool junpFlg = false;
 
     Vector3 val;
 
@@ -58,9 +59,10 @@ public class PlayerCntl : MonoBehaviour
         val.y = 0f;
         this.transform.position += val * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && junpFlg == false)
         {
             rd.velocity += new Vector3(0.0f, junp, 0.0f);
+            junpFlg = true;
             Debug.Log("押されてる");
         }
 
@@ -88,6 +90,14 @@ public class PlayerCntl : MonoBehaviour
                 // ↓ レイが当たっているオブジェクトを削除
                 Destroy(hit.collider.gameObject);
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (junpFlg)
+        {
+            junpFlg = false;
         }
     }
 }
