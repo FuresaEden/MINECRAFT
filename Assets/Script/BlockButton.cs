@@ -1,26 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 using System;
 
-public class AllBlocks : MonoBehaviour
+public class BlockButton : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> StornBlocks = new List<GameObject>();
+    Vector3 ButtonPos;
 
     [SerializeField]
-    private List<GameObject> IronBlocks = new List<GameObject>();
+    GameObject block;
 
+    GameObject blocks;
     // Start is called before the first frame update
     void Start()
     {
-        
+        blocks = gameObject.GetComponent<PlayerCntl>().blockPrefab;
     }
 
     // Update is called once per frame
     void Update()
     {
+        this.transform.position = ButtonPos;
+    }
 
+    public void OnClick()
+    {
+        blocks = block;
     }
 }
