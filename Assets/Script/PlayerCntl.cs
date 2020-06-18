@@ -31,7 +31,9 @@ public class PlayerCntl : MonoBehaviour
     private Vector3 pos;
 
     [SerializeField]
-    private GameObject blockPrefab;
+    public GameObject blockPrefab;
+
+    CharacterController charcon;
 
     // Use this for initialization
     void Start()
