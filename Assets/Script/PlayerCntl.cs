@@ -17,12 +17,25 @@ public class PlayerCntl : MonoBehaviour
     float junp = 5.0f;
     bool junpFlg = false;
 
+    bool flyFlg = false;
+
+    enum State
+    {
+        Normal = 0, Jump, Fly
+    }
+
+    State state = State.Normal;
+
     Vector3 val;
 
 
+    public float sensitivity = 1f; // いわゆるマウス感度
+    private float mouse_move_x;
+    private float rotation_y = 0f;
+
     //プレイヤーの移動速度
     public float speed = 5.0f;
-    Rigidbody rd;
+    Rigidbody rb;
 
     [SerializeField]
     Vector3 moveForward;
@@ -32,18 +45,17 @@ public class PlayerCntl : MonoBehaviour
 
     [SerializeField]
     public GameObject blockPrefab;
-
-    CharacterController charcon;
-
+    
     // Use this for initialization
     void Start()
     {
         
         //プレイヤーのRigidbodyを読み込む
-        rd = this.GetComponent<Rigidbody>();
+        rb = this.GetComponent<Rigidbody>();
 
         // ↓ 画面中央の平面座標を取得する
         displayCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -51,22 +63,54 @@ public class PlayerCntl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Vector3 rot = new Vector3(Camera.main.transform.rotation.x,0f, Camera.main.transform.rotation.z);
-        //this.transform.rotation = Quaternion.LookRotation(rot);
-        //this.transform.Rotate(new Vector3(transform.rotation.x,0,transform.rotation.z));
+        
+        mouse_move_x = Input.GetAxis("Mouse X") * sensitivity;
 
-        moveX = Input.GetAxis("Horizontal") * speed;
-        moveZ = Input.GetAxis("Vertical") * speed;
-        val =Camera.main.transform.rotation * new Vector3(moveX,0,moveZ);
-        val.y = 0f;
-        this.transform.position += val * Time.deltaTime;
+        //回転角度を変更
+        rotation_y += mouse_move_x;
+        
+        //rotationSpeed度回転
+        transform.rotation = Quaternion.Euler(0, rotation_y, 0);
 
-        if (Input.GetKeyDown(KeyCode.Space) && junpFlg == false)
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            rd.velocity += new Vector3(0.0f, junp, 0.0f);
-            junpFlg = true;
-            Debug.Log("押されてる");
+            if (state != State.Fly) state = State.Fly;
+            else state = State.Normal;
         }
+        
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        Debug.Log("Horizontal:" + Input.GetAxis("Horizontal"));
+        Debug.Log("Vertical:" + Input.GetAxis("Vertical"));
+        
+        //Rigidbodyに力を加える
+        rb.AddForce(x*50f, 0, z*50f,ForceMode.Acceleration);
+
+        switch (state)
+            {
+                case State.Normal:
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    rb.velocity += new Vector3(0.0f, junp, 0.0f);
+                    state = State.Jump;
+                    junpFlg = true;
+                    Debug.Log("押されてる");
+                }
+                    break;
+
+                case State.Fly:
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    val.y += 5f * Time.deltaTime;
+                }
+                    break;
+            }
+
+       
+        
+
+        this.transform.position += val;
 
         // ↓ 「カメラからのレイ」を画面中央の平面座標から飛ばす
         Ray ray = Camera.main.ScreenPointToRay(displayCenter);
@@ -97,8 +141,9 @@ public class PlayerCntl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (junpFlg)
+        if (state == State.Jump)
         {
+            state = State.Normal;
             junpFlg = false;
         }
     }
