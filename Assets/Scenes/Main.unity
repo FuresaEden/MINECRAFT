@@ -48014,7 +48014,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &852985216
 GameObject:
@@ -105521,9 +105521,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ButtonPos: {x: 0, y: 0, z: 0}
   block:
-  - {fileID: 2353283711220986081, guid: 374e28747864efc46a1c685bdaa8ddc6, type: 3}
-  - {fileID: 2110745855764977414, guid: 7cddc7e856fe18647881b568a23baf7d, type: 3}
-  - {fileID: 1325532749168786201, guid: 09da42d6c1664db41b18c6d97d65a3fa, type: 3}
+  - {fileID: 5901230797059950486, guid: 0149e725d7e1f4e46bba235e3fcbcece, type: 3}
+  - {fileID: 4248979449786445670, guid: 13906e0328f1cc147a2c932d6410fd3f, type: 3}
+  - {fileID: 5051273283844126783, guid: 08959064a9af83d4cae400c16880fae1, type: 3}
   nowBlock: {fileID: 0}
   player: {fileID: 852624361}
 --- !u!1 &1872631553

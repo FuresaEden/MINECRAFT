@@ -29,15 +29,15 @@ public class BlockButton : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            nowBlock = block[0];
+            nowBlock = block[0];        //木材ブロック
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            nowBlock = block[1];
+            nowBlock = block[1];        //木材ハーフブロック
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            nowBlock = block[2];
+            nowBlock = block[2];        //ガラスブロック
         }
 
         player.GetComponent<PlayerCntl>().blockPrefab = nowBlock;
