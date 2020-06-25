@@ -1,0 +1,14 @@
+diff a/Assets/Script/InventoryManager.cs b/Assets/Script/InventoryManager.cs	(rejected hunks)
+@@ -13,9 +13,9 @@
+     // Update is called once per frame
+     void Update()
+     {
+-        if (Input.GetKeyDown())
+-        {
++        //if (Input.GetKeyDown())
++        //{
+ 
+-        }
++        //}
+     }
+ }

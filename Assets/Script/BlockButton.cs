@@ -9,23 +9,37 @@ public class BlockButton : MonoBehaviour
     Vector3 ButtonPos;
 
     [SerializeField]
-    GameObject block;
+    List<GameObject> block = new List<GameObject>();
 
-    GameObject blocks;
+
+    [SerializeField]
+    GameObject nowBlock;
+
+
+    [SerializeField]
+    GameObject player;
     // Start is called before the first frame update
     void Start()
     {
-        blocks = gameObject.GetComponent<PlayerCntl>().blockPrefab;
+        nowBlock = block[0];
     }
 
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = ButtonPos;
-    }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            nowBlock = block[0];
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            nowBlock = block[1];
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            nowBlock = block[2];
+        }
 
-    public void OnClick()
-    {
-        blocks = block;
+        player.GetComponent<PlayerCntl>().blockPrefab = nowBlock;
     }
 }

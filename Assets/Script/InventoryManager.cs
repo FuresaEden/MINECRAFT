@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown())
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-
+            if (Cursor.visible)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
 }
