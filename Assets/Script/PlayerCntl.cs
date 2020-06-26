@@ -15,9 +15,6 @@ public class PlayerCntl : MonoBehaviour
 
     [SerializeField]
     float junp = 5.0f;
-    bool junpFlg = false;
-
-    bool flyFlg = false;
 
     enum State
     {
@@ -78,8 +75,8 @@ public class PlayerCntl : MonoBehaviour
             else state = State.Normal;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = Vector3.forward.x * Input.GetAxis("Horizontal");
+        float z = Vector3.forward.z * Input.GetAxis("Vertical");
 
         Debug.Log("Horizontal:" + Input.GetAxis("Horizontal"));
         Debug.Log("Vertical:" + Input.GetAxis("Vertical"));
@@ -94,7 +91,6 @@ public class PlayerCntl : MonoBehaviour
                 {
                     rb.velocity += new Vector3(0.0f, junp, 0.0f);
                     state = State.Jump;
-                    junpFlg = true;
                     Debug.Log("押されてる");
                 }
                 break;
@@ -102,15 +98,12 @@ public class PlayerCntl : MonoBehaviour
             case State.Fly:
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    val.y += 5f * Time.deltaTime;
+                    //val.y += 5f * Time.deltaTime;
                 }
                 break;
         }
 
-
-
-
-        this.transform.position += val;
+        //this.transform.position += val;
 
         // ↓ 「カメラからのレイ」を画面中央の平面座標から飛ばす
         Ray ray = Camera.main.ScreenPointToRay(displayCenter);
@@ -144,7 +137,6 @@ public class PlayerCntl : MonoBehaviour
         if (state == State.Jump)
         {
             state = State.Normal;
-            junpFlg = false;
         }
     }
 }
