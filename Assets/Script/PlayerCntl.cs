@@ -25,11 +25,6 @@ public class PlayerCntl : MonoBehaviour
 
     Vector3 val;
 
-
-    public float sensitivity = 1f; // いわゆるマウス感度
-    private float mouse_move_x;
-    private float rotation_y = 0f;
-
     //プレイヤーの移動速度
     public float speed = 5.0f;
     Rigidbody rb;
@@ -61,13 +56,7 @@ public class PlayerCntl : MonoBehaviour
     void Update()
     {
 
-        mouse_move_x = Input.GetAxis("Mouse X") * sensitivity;
-
-        //回転角度を変更
-        rotation_y += mouse_move_x;
-
-        //rotationSpeed度回転
-        transform.rotation = Quaternion.Euler(0, rotation_y, 0);
+        
 
         if (Input.GetKeyDown(KeyCode.F))
         {
