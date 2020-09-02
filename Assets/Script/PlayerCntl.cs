@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PlayerCntl : MonoBehaviour
 {
-
-    Vector2 displayCenter;
-
     //プレイヤーの位置を格納
     [SerializeField]
     float moveX;
@@ -14,7 +11,7 @@ public class PlayerCntl : MonoBehaviour
     float moveZ;
 
     [SerializeField]
-    float junp = 5.0f;
+    float jump = 5.0f;
 
     enum State
     {
@@ -32,22 +29,20 @@ public class PlayerCntl : MonoBehaviour
     [SerializeField]
     Vector3 moveForward;
 
-    // ブロックを設置する位置を一応リアルタイムで格納
-    private Vector3 pos;
 
-    [SerializeField]
-    public GameObject blockPrefab;
+    private float mouse_move_x;
+    private float rotation_y = 0f;
+
+    public float sp = 3f;
+    
+    private float h, v;
+    private Vector3 moveDirection = Vector3.zero;
 
     // Use this for initialization
     void Start()
     {
-
         //プレイヤーのRigidbodyを読み込む
         rb = this.GetComponent<Rigidbody>();
-
-        // ↓ 画面中央の平面座標を取得する
-        displayCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -55,70 +50,52 @@ public class PlayerCntl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        
-
         if (Input.GetKeyDown(KeyCode.F))
         {
             if (state != State.Fly) state = State.Fly;
             else state = State.Normal;
         }
 
+        mouse_move_x = Input.GetAxis("Mouse X") * 1f;
+
+        rotation_y += mouse_move_x;
+
+        //rotationSpeed度回転
+        transform.rotation = Quaternion.Euler(0, rotation_y, 0);
+
         float x = Vector3.forward.x * Input.GetAxis("Horizontal");
         float z = Vector3.forward.z * Input.GetAxis("Vertical");
-
-        Debug.Log("Horizontal:" + Input.GetAxis("Horizontal"));
-        Debug.Log("Vertical:" + Input.GetAxis("Vertical"));
-
+        
         //Rigidbodyに力を加える
-        rb.AddForce(x * 50f, 0, z * 50f, ForceMode.Acceleration);
+        //rb.AddForce(x * 50f, 0, z * 50f, ForceMode.Force);
+         h = Input.GetAxis("Horizontal");
+         v = Input.GetAxis("Vertical");
+
+        if (h != 0 || v != 0)
+        {
+            moveDirection = sp * new Vector3(h, 0, v);
+            moveDirection = transform.TransformDirection(moveDirection);
+            moveDirection.y = rb.velocity.y;
+            rb.velocity = moveDirection;
+        }
 
         switch (state)
         {
             case State.Normal:
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    rb.velocity += new Vector3(0.0f, junp, 0.0f);
+                    rb.velocity += new Vector3(0.0f, jump, 0.0f);
                     state = State.Jump;
+                    //rb.AddForce(0, 5f, 0, ForceMode.Impulse);
                     Debug.Log("押されてる");
                 }
                 break;
 
             case State.Fly:
-                if (Input.GetKey(KeyCode.Space))
-                {
-                    //val.y += 5f * Time.deltaTime;
-                }
                 break;
         }
 
         //this.transform.position += val;
-
-        // ↓ 「カメラからのレイ」を画面中央の平面座標から飛ばす
-        Ray ray = Camera.main.ScreenPointToRay(displayCenter);
-        // ↓ 当たったオブジェクト情報を格納する変数
-        RaycastHit hit;
-
-        // ↓ Physics.Raycast() でレイを飛ばす
-        if (Physics.Raycast(ray, out hit))
-        {
-            // ↓ 生成位置の変数の値を「ブロックの向き + ブロックの位置」
-            pos = hit.normal + hit.collider.transform.position;
-
-            // ↓ 右クリック
-            if (Input.GetMouseButtonDown(1))
-            {
-                // 生成位置の変数の座標にブロックを生成
-                Instantiate(blockPrefab, pos, Quaternion.identity);
-            }
-
-            // ↓ 左クリック
-            if (Input.GetMouseButtonDown(0))
-            {
-                // ↓ レイが当たっているオブジェクトを削除
-                Destroy(hit.collider.gameObject);
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider other)

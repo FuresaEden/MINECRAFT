@@ -17,7 +17,7 @@ public class BlockButton : MonoBehaviour
 
 
     [SerializeField]
-    GameObject player;
+    GameObject inventory;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +39,11 @@ public class BlockButton : MonoBehaviour
         {
             nowBlock = block[2];        //ガラスブロック
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            nowBlock = block[3];        //土ブロック
+        }
 
-        player.GetComponent<PlayerCntl>().blockPrefab = nowBlock;
+        inventory.GetComponent<PutBlock>().blockPrefab = nowBlock;
     }
 }
